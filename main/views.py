@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+
+from main.models import Product
 from .forms import RegisterForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -35,4 +37,5 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    products = Product.objects.all()
+    return render(request, 'dashboard.html', {'products': products})
