@@ -57,3 +57,13 @@ class UserProductProgress(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.product.title} - {'Completed' if self.completed else 'In Progress'}"
+    
+
+class QuizSubmission(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    video = models.ForeignKey('Video', on_delete=models.CASCADE)
+    score = models.IntegerField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.video.title} - Score: {self.score}'

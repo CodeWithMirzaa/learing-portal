@@ -22,10 +22,16 @@
                     <h5 class="card-title">{{ product.title }}</h5>
                     <p class="card-text">{{ product.description }}</p>
 
+                    <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">
+                        {% if product.id in completed_products %}
+                            Rewatch
+                        {% else %}
+                            Start Learning
+                        {% endif %}
+                    </a>
+
                     {% if product.id in completed_products %}
-                        <span class="badge bg-success">Completed</span>
-                    {% else %}
-                        <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">Start Learning</a>
+                        <span class="badge bg-success ms-2">Completed</span>
                     {% endif %}
                 </div>
             </div>
