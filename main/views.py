@@ -126,3 +126,22 @@ def quiz_view(request, video_id):
         form = QuizForm(questions=questions)
 
     return render(request, 'quiz.html', {'form': form, 'video': video})
+
+@login_required
+def quiz_results_view(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    videos = product.videos.all()
+
+    results = []
+    for video in videos:
+        submission = QuizSubmission.objects.filter(user=request.user, video=video).first()
+        results.append({
+            'video': video,
+            'score': submission.score if submission else None,
+            'submitted': submission is not None
+        })
+
+    return render(request, 'quiz_results.html', {
+        'product': product,
+        'results': results
+    })

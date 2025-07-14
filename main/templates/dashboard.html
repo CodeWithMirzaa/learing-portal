@@ -24,7 +24,10 @@
 
                     <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">
                         {% if product.id in completed_products %}
+                        
                             Rewatch
+                            <!-- <span class="badge bg-success">Completed</span> -->
+                        <a href="{% url 'quiz_results' product.id %}" class="btn btn-outline-info btn-sm mt-2">View Results</a>
                         {% else %}
                             Start Learning
                         {% endif %}

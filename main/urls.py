@@ -10,6 +10,6 @@ urlpatterns = [
      path('upload-video/', views.upload_video_view_test, name='upload_video'),
      path('product/<int:pk>/', views.product_detail_view, name='product_detail'),
      path('quiz/<int:video_id>/', views.quiz_view, name='quiz'),
-    
+    path('quiz-results/<int:product_id>/', views.quiz_results_view, name='quiz_results'),
 
 ]
