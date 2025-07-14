@@ -14,12 +14,17 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ product.title }}</h5>
                     <p class="card-text">{{ product.description }}</p>
-                    <a href="#" class="btn btn-primary">Start Learning</a>
+                    <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">Start Learning</a>
+
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
+    {% if user.is_staff %}
+    <a href="{% url 'upload_video' %}">Upload Video</a>
+{% endif %}
+
     <a href="{% url 'logout' %}" class="btn btn-danger mt-3">Logout</a>
 </div>
 </body>

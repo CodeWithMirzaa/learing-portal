@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Upload a Video</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if user.is_staff %}
+    <a href="{% url 'upload_video' %}">Upload Video</a>
+{% endif %}
+    </form>
+</div>
+{% endblock %}

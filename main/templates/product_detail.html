@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ product.title }}</h2>
+    <p>{{ product.description }}</p>
+
+    <h4>Videos:</h4>
+    <ul>
+        {% for video in product.videos.all %}
+            <li class="mb-4">
+                <strong>{{ video.title }}</strong><br>
+                <iframe
+                    id="video_{{ forloop.counter }}"
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/{{ video.youtube_id }}?enablejsapi=1"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen>
+                </iframe>
+                <button
+                    id="quiz_button_{{ forloop.counter }}"
+                    class="btn btn-success mt-2"
+                    style="display: none;">
+                    Take Quiz
+                </button>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Load YouTube API -->
+<script>
+    var players = {};
+
+    function onYouTubeIframeAPIReady() {
+        {% for video in product.videos.all %}
+        var player{{ forloop.counter }} = new YT.Player("video_{{ forloop.counter }}", {
+            events: {
+                'onStateChange': function(event) {
+                    if (event.data === YT.PlayerState.PLAYING) {
+                        setTimeout(function() {
+                            document.getElementById("quiz_button_{{ forloop.counter }}").style.display = "inline-block";
+                        }, 10000);  // 10 seconds
+                    }
+                }
+            }
+        });
+        players["video_{{ forloop.counter }}"] = player{{ forloop.counter }};
+        {% endfor %}
+    }
+
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+</script>
+{% endblock %}
