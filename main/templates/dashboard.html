@@ -7,6 +7,13 @@
 <body class="bg-light">
 <div class="container mt-5">
     <h2 class="mb-4">Welcome, {{ request.user.username }}</h2>
+
+    {% if user.is_staff %}
+        <div class="mb-4">
+            <a href="{% url 'upload_video' %}" class="btn btn-warning">Upload New Video</a>
+        </div>
+    {% endif %}
+
     <div class="row">
         {% for product in products %}
         <div class="col-md-4">
@@ -14,16 +21,17 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ product.title }}</h5>
                     <p class="card-text">{{ product.description }}</p>
-                    <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">Start Learning</a>
 
+                    {% if product.id in completed_products %}
+                        <span class="badge bg-success">Completed</span>
+                    {% else %}
+                        <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">Start Learning</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-    {% if user.is_staff %}
-    <a href="{% url 'upload_video' %}">Upload Video</a>
-{% endif %}
 
     <a href="{% url 'logout' %}" class="btn btn-danger mt-3">Logout</a>
 </div>

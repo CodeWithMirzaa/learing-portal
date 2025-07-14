@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h2>Quiz for: {{ video.title }}</h2>
+    <h3>Quiz for: {{ video.title }}</h3>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-success">Submit Quiz</button>
     </form>
 </div>
 {% endblock %}
