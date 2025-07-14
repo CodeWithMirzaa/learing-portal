@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 
-from main.models import Product
-from .forms import RegisterForm, VideoForm
+from main.models import Choice, Product, Video
+from .forms import QuizForm, RegisterForm, VideoForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
+
 
 
 def landing(request):
@@ -59,3 +60,53 @@ def upload_video_view_test(request):
 def product_detail_view(request, pk):
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'product_detail.html', {'product': product})
+
+@login_required
+def quiz_view(request, video_id):
+    video = get_object_or_404(Video, id=video_id)
+    questions = video.questions.prefetch_related('choices')
+
+    if request.method == 'POST':
+        score = 0
+        total = questions.count()
+
+        for question in questions:
+            selected = request.POST.get(f'question_{question.id}')
+            if selected:
+                choice = Choice.objects.get(id=selected)
+                if choice.is_correct:
+                    score += 1
+
+        # If passed, redirect to next video or dashboard
+        next_video = Video.objects.filter(product=video.product, order__gt=video.order).order_by('order').first()
+        if next_video:
+            return redirect('product_detail', pk=video.product.pk)  # or create a dedicated video view
+        else:
+            return redirect('dashboard')  # mark product as completed if needed
+
+    return render(request, 'quiz.html', {
+        'video': video,
+        'questions': questions,
+    })
+
+
+@login_required
+def quiz_view(request, video_id):
+    video = get_object_or_404(Video, id=video_id)
+    questions = video.questions.all()
+
+    if request.method == "POST":
+        form = QuizForm(request.POST, questions=questions)
+        if form.is_valid():
+            # You can store the result if needed
+            # Find next video
+            next_video = Video.objects.filter(product=video.product, order__gt=video.order).order_by('order').first()
+            if next_video:
+                return redirect('product_detail', product_id=video.product.id)  # It will load next video automatically
+            else:
+                # Mark product as complete (You can store user-product completion)
+                return redirect('dashboard')
+    else:
+        form = QuizForm(questions=questions)
+
+    return render(request, 'quiz.html', {'form': form, 'video': video})

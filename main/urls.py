@@ -9,5 +9,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
      path('upload-video/', views.upload_video_view_test, name='upload_video'),
      path('product/<int:pk>/', views.product_detail_view, name='product_detail'),
+     path('quiz/<int:video_id>/', views.quiz_view, name='quiz'),
+    
 
 ]
