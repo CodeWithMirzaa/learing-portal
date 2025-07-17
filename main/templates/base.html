@@ -5,48 +5,88 @@
     <title>{% block title %}Learning Portal{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .card {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem;
+        }
+
+        html[data-bs-theme="dark"] .card {
+            background-color: #1e1e1e;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
         .theme-toggle {
             position: fixed;
             bottom: 1rem;
             right: 1rem;
             z-index: 1050;
         }
-        .card {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 0.75rem;
+
+        footer {
+            padding: 20px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            background-color: #f8f9fa;
+            color: #777;
         }
-        html[data-bs-theme="dark"] .card {
-            background-color: #1e1e1e;
-            border-color: rgba(255, 255, 255, 0.1);
+
+        html[data-bs-theme="dark"] footer {
+            background-color: #212529;
+            color: #bbb;
         }
-        #theme-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1050;
+
+        html[data-bs-theme="dark"] .navbar {
+            background-color: #1c1c1c !important;
         }
+
+        html[data-bs-theme="dark"] .navbar .navbar-brand {
+            color: #fff !important;
+        }
+    </style>
     </style>
 </head>
 <body class="bg-light text-dark">
+    <nav class="navbar navbar-expand-lg bg-light border-bottom shadow-sm justify-content-center">
+        <div class="container">
+            <span class="navbar-brand mx-auto fw-bold">Learning Portal</span>
+        </div>
+    </nav>
 
-    <!-- Dark Mode Toggle Button -->
+    
+
+
     <div class="theme-toggle">
         <button id="toggle-theme" class="btn btn-sm btn-outline-dark rounded-pill px-3">
             🌙
         </button>
     </div>
 
-    <div class="container mt-4">
+    <div class="container mt-5">
         {% block content %}{% endblock %}
     </div>
+
+    
 
     <script>
         const toggleBtn = document.getElementById("toggle-theme");
         const html = document.documentElement;
         const body = document.body;
 
-        // Load stored theme preference
+        
         const storedTheme = localStorage.getItem("theme");
         if (storedTheme === "dark") {
             setDarkTheme();
@@ -81,5 +121,14 @@
             toggleBtn.innerHTML = "🌙";
         }
     </script>
+    
 </body>
+
+
 </html>
+
+<footer>
+    <div class="container">
+        Made by Mirza
+    </div>
+</footer>
