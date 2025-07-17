@@ -20,7 +20,9 @@ class Video(models.Model):
     def __str__(self):
         return f"{self.product.title} – {self.title}"
 
+    @property
     def youtube_id(self):
+        import re
         regex = r'(?:youtube\.com/(?:watch\?v=|embed/)|youtu\.be/)([^\s&?/]+)'
         match = re.search(regex, self.youtube_url)
         return match.group(1) if match else ''

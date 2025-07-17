@@ -1,15 +1,26 @@
 {% extends "base.html" %}
-{% load static %}
-
+{% load form_tags %}
+{% block title %}Upload Video{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Upload a Video</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        {% if user.is_staff %}
-    <a href="{% url 'upload_video' %}">Upload Video</a>
-{% endif %}
-    </form>
+<div class="card mx-auto" style="max-width: 500px;">
+    <div class="card-body">
+        <h3 class="text-center mb-4">Upload a Video</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.title.label_tag }}
+                {{ form.title|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                {{ form.youtube_id.label_tag }}
+                {{ form.youtube_id|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                {{ form.product.label_tag }}
+                {{ form.product|add_class:"form-control" }}
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Upload</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

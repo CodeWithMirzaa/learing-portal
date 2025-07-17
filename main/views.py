@@ -70,8 +70,11 @@ def upload_video_view_test(request):
 @login_required
 def product_detail_view(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    return render(request, 'product_detail.html', {'product': product})
-
+    submitted_videos = QuizSubmission.objects.filter(user=request.user).values_list('video_id', flat=True)
+    return render(request, 'product_detail.html', {
+        'product': product,
+        'submitted_videos': submitted_videos
+    })
 
 @login_required
 def quiz_view(request, video_id):
@@ -90,11 +93,10 @@ def quiz_view(request, video_id):
                     score += 1
 
             # Save quiz submission
-            QuizSubmission.objects.update_or_create(
-                user=request.user,
-                video=video,
-                defaults={'score': score}
-            )
+            QuizSubmission.objects.create(
+            user=request.user,
+            video=video,
+            score=score)
 
             messages.success(request, f'You scored {score}/{total}')
 
@@ -127,21 +129,18 @@ def quiz_view(request, video_id):
 
     return render(request, 'quiz.html', {'form': form, 'video': video})
 
+
 @login_required
 def quiz_results_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     videos = product.videos.all()
 
-    results = []
+    video_results = {}
     for video in videos:
-        submission = QuizSubmission.objects.filter(user=request.user, video=video).first()
-        results.append({
-            'video': video,
-            'score': submission.score if submission else None,
-            'submitted': submission is not None
-        })
+        submissions = QuizSubmission.objects.filter(user=request.user, video=video).order_by('-submitted_at')
+        video_results[video] = submissions  # <-- Store all submissions per video
 
     return render(request, 'quiz_results.html', {
         'product': product,
-        'results': results
+        'results': video_results
     })
